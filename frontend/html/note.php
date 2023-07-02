@@ -14,6 +14,7 @@
 
     <!-- Fontfaces CSS-->
     <link href="../css/font-face.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
     <link href="../vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
     <link href="../vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
     <link href="../vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -181,7 +182,7 @@
                                             <img src="../images/icon/avatar-01.jpg" alt="John Doe" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">john doe</a>
+                                            <a class="js-acc-btn" href="#">IHM Projet</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -192,9 +193,9 @@
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a href="#">john doe</a>
+                                                        <a href="#">IHM Projet</a>
                                                     </h5>
-                                                    <span class="email">johndoe@example.com</span>
+                                                    <span class="email">www.gnote.com</span>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
@@ -330,8 +331,8 @@
                                                 <i class="fa fa-bookmark"></i>
                                             </div>
                                                 <div class="rs-select2--light rs-select2--md form-control">
-                                                    <select class="js-select2" name="matricule" id="matricule" placeholder="Anarana">
-                                                        <option >Matricule</option>
+                                                    <select class="js-select2" name="matricule" id="matricule">
+                                                        <option>Matricule</option>
                                                         <!-- Ajout dynamiquement des valeurs des Matricule venant de la base de donnée -->
                                                     </select>
                                                     <div class="dropDownSelect2"></div>
@@ -345,7 +346,8 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-graduation-cap"></i>
                                             </div>
-                                            <input type="text" id="niveau" name="niveau" placeholder="Niveau" class="form-control">
+                                            <input type="text" id="niveau_affiche" name="niveau_afficher" placeholder="Niveau" class="form-control" disabled>
+                                            <input type="text" id="niveau" name="niveau" placeholder="Niveau" class="form-control" style="display: none;">
                                         </div>
                                     </div>
 
@@ -376,7 +378,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-primary" id="btn_ajouter">Ajouter</button>
+                                        <button type="button" class="btn btn-primary" id="btn_ajouter" disabled>Ajouter</button>
                                     </div>
                                 </form>
                             </div>
@@ -476,6 +478,7 @@
     <script src="../vendor/chartjs/Chart.bundle.min.js"></script>
     <script src="../vendor/select2/select2.min.js">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
 
     <!-- Main JS-->
     <script src="../js/main.js"></script>

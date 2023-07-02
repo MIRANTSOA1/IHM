@@ -14,9 +14,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         <button class="item btn_modifier" type="button" id="btn_modifier" data-toggle="modal" data-target="#scrollmodal_modif">
             <i class="zmdi zmdi-edit"></i>
         </button>
-        <button class="item btn_supprimer" type="button" id="btn_supprimer">
-            <i class="zmdi zmdi-delete"></i>
-        </button>
+        <button class="item btn_supprimer" type="button" data-toggle="modal" data-target="#scrollmodal_supprimer">
+                <i class="zmdi zmdi-delete"></i>
+            </button>
     </div>
 </td>';
     echo '</tr>

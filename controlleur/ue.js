@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function remplirMatiereParNiveau(niveau, champCibler) {
-    // Appel AJAX pour récupérer le niveau correspondantau niveau
+    // Appel AJAX pour récupérer le niveau correspondant au niveau
         $.ajax({
             url: '../../backend/ue/getMatiere.php',
             method: 'POST',
@@ -16,9 +16,26 @@ $(document).ready(function() {
         });
     }
 
+    function remplirMatiereParNiveauPourAJout(niveau, champCibler) {
+    // Appel AJAX pour récupérer le niveau correspondant au niveau
+        $.ajax({
+            url: '../../backend/ue/getMatiereAjout.php',
+            method: 'POST',
+            data: { niveau : niveau },
+            dataType: 'json',
+            success: function(response) {
+                $(champCibler).empty();
+                $(champCibler).append($('<option>').text('Matière').prop('disabled', true));
+                $.each(response.matieres, function(index, value) {
+                    $(champCibler).append($('<option>').text(value).attr('value', value));
+                });
+            }
+        });
+    }
+
     //Remplissement automatique du champ Matiere 
     $('#niveau').on('change', function() {                
-       remplirMatiereParNiveau($('#niveau').val(),'#matiere');
+       remplirMatiereParNiveauPourAJout($('#niveau').val(),'#matiere');
     });
 
     $('#niveau_datatable').on('change', function(event) {                
@@ -76,12 +93,57 @@ $(document).ready(function() {
     }
     $('#niveau_datatable').val("L3 IG").attr('selected', 'selected')    
     affichage($('#niveau_datatable').val()); 
+
+    //Activer le bouton si es formulaire sont rempli
+    $('#ajout_ue input:enabled, #ajout_ue select').on('input change',function () {
+        var formulaireValide = true;
+        if ($('#ue').val() === '') {
+            formulaireValide = false;
+        }
+        if ($('#niveau').val() === 'Niveau') {
+            formulaireValide = false;
+        }
+        if ($('#matiere').val() == '') {
+            formulaireValide = false;
+        }        
+        if(formulaireValide){
+            $('#btn_ajouter').prop('disabled', false);
+        }
+        else{
+            $('#btn_ajouter').prop('disabled', true);
+        }
+    });
+
     //Ajout d'une UE
     $('#btn_ajouter').click(function(event){
         event.preventDefault();
-        $.ajax({ type : "POST",url : "../../backend/ue/ajout_ue.php", data : $("#ajout_ue").serialize(),success : function(result) { 
+        $.ajax({ type : "POST",url : "../../backend/ue/ajout_ue.php", data : $("#ajout_ue").serialize(),success : function(result) {
+         if(result === "erreur"){
+                const messageerror = Swal.mixin({
+                    toast : true,
+                    position : 'top-end',
+                    icon : 'error',
+                    title : "L'UE existe déjà.",
+                    showConfirmButton : false,
+                    timer : 5000,
+                    timerProgressBar : true
+                });
+                messageerror.fire();
+            }
+           else if(result === "success"){
+                const messageSucces = Swal.mixin({
+                    toast : true,
+                    position : 'top-end',
+                    icon : 'success',
+                    title : "Ajouter avec succès",
+                    showConfirmButton : false,
+                    timer : 2500,
+                    timerProgressBar : true
+                });
+                messageSucces.fire(); 
             $("#ajout_ue").trigger('reset');
             affichage($('#niveau_datatable').val());
+            }
         }});
 
     });
@@ -120,10 +182,50 @@ $(document).ready(function() {
     //Modifier ue
     $('#btn_valider').click(function(event){
         event.preventDefault();
-        $.ajax({ type : "POST",url : "../../backend/ue/modifier_ue.php", data : $("#modifier_ue").serialize(),success : function(result) { 
-            $("#modifier_ue").trigger('reset');
-           affichage($('#niveau_datatable').val());
-        }});
+        if ($("#matiere_modif").val() == "") {
+            const messageErreur = Swal.fire({
+                text : 'Voulez-vous vraiment supprimer cette Unité d\'enseignement ?',
+                //text : 'Cette action supprimera toutes ces données et ces notes.',
+                icon : 'warning',
+                showCancelButton : true,
+                confirmButtonColor : '#d33',
+                //cancelButtonColor : '#d33',
+                confirmButtonText : 'Oui, supprimer',
+                cancelButtonText  : 'Annuler',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({ type : "POST",url : "../../backend/ue/modifier_ue.php", data : $("#modifier_ue").serialize(),success : function(result) { 
+                        Swal.fire({
+                            position : 'top-end',
+                            toast :true,
+                            title : 'Supprimer avec succès.',
+                            icon : 'success',
+                            showConfirmButton : false,
+                            timer : 2500,
+                            timerProgressBar : true              
+                        })
+                        $("#modifier_ue").trigger('reset');
+                        affichage($('#niveau_datatable').val());
+                    }});
+                }
+            });
+        }
+        else{
+            $.ajax({ type : "POST",url : "../../backend/ue/modifier_ue.php", data : $("#modifier_ue").serialize(),success : function(result) { 
+                Swal.fire({
+                    position : 'top-end',
+                    toast :true,
+                    title : "Modifier avec succès.",
+                    icon : 'success',
+                    showConfirmButton : false,
+                    timer : 2500,
+                    timerProgressBar : true              
+                })
+                $("#modifier_ue").trigger('reset');
+                affichage($('#niveau_datatable').val());
+            }});
+        }
+        
 
     });
 

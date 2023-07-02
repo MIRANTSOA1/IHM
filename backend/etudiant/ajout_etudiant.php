@@ -9,10 +9,9 @@ if ($con) {
     $sql="INSERT INTO etudiant (matricule, nom, adresse, niveau)  VALUES('$matricule','$nom','$adresse','$niveau')";
     $result_1=mysqli_query($con,$req);
     if (mysqli_num_rows($result_1) > 0) {
-        echo "<div class='alert alert-danger'>{$matricule} - Existe déja.</div>";
+       echo "erreur";
     }else{
         mysqli_query($con,$sql);
-        echo "<div class='alert alert-success'>Ajout avec succès.</div>";
         $sql="SELECT * FROM etudiant ORDER BY id DESC;";
         $result=mysqli_query($con,$sql);
         while ($row = mysqli_fetch_assoc($result)) {

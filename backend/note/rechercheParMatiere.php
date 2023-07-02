@@ -18,9 +18,9 @@ $matiere = $_POST['recherche'];
                     <button class="item btn_modifier" id="btn_modifier" data-toggle="modal" data-target="#scrollmodal_modif">
                         <i class="zmdi zmdi-edit"></i>
                     </button>
-                    <button class="item btn_supprimer" data-toggle="tooltip" data-placement="top" title="Supprimer" id="btn_supprimer">
-                        <i class="zmdi zmdi-delete"></i>
-                    </button>
+                   <button class="item btn_supprimer" type="button" data-toggle="modal" data-target="#scrollmodal_supprimer">
+                <i class="zmdi zmdi-delete"></i>
+            </button>
                 </div>
             </td>';
                 echo '</tr>
@@ -45,9 +45,9 @@ $matiere = $_POST['recherche'];
                     <button class="item btn_modifier" id="btn_modifier" data-toggle="modal" data-target="#scrollmodal_modif">
                         <i class="zmdi zmdi-edit"></i>
                     </button>
-                    <button class="item btn_supprimer" data-toggle="tooltip" data-placement="top" title="Supprimer" id="btn_supprimer">
-                        <i class="zmdi zmdi-delete"></i>
-                    </button>
+                   <button class="item btn_supprimer" type="button" data-toggle="modal" data-target="#scrollmodal_supprimer">
+                <i class="zmdi zmdi-delete"></i>
+            </button>
                 </div>
             </td>';
                 echo '</tr>

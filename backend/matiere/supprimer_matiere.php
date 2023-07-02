@@ -2,9 +2,11 @@
 $con=mysqli_connect('localhost','root','','gestion_des_notes');
 if ($con) {
     $data = json_decode(file_get_contents('php://input'), true);
-    $matiere = $data['0'];
-    $niveau = $data['1'];
+    $matiere =$_POST['matiere'];
+    $niveau = $_POST['niveau'];
     $sql="DELETE FROM matiere WHERE  matiere = '$matiere' AND niveau = '$niveau' ";
+    $result=mysqli_query($con,$sql);
+    $sql="DELETE FROM ue WHERE  matiere = '$matiere' AND niveau = '$niveau' ";
     $result=mysqli_query($con,$sql);
     $sql="SELECT * FROM matiere";
     $result=mysqli_query($con,$sql);
@@ -20,7 +22,7 @@ if ($con) {
             <button class="item btn_modifier" id="btn_modifier" data-toggle="modal" data-target="#scrollmodal_modif">
                 <i class="zmdi zmdi-edit"></i>
             </button>
-            <button class="item btn_supprimer" data-toggle="tooltip" data-placement="top" title="Supprimer" id="btn_supprimer">
+           <button class="item btn_supprimer" type="button" data-toggle="modal" data-target="#scrollmodal_supprimer">
                 <i class="zmdi zmdi-delete"></i>
             </button>
         </div>

@@ -4,8 +4,12 @@ if ($con) {
         $matiere=$_POST['matiere'];
         $coefficient=$_POST['coefficient'];
         $niveau=$_POST['niveau'];
-        
+        $req = "SELECT * FROM matiere WHERE matiere = '$matiere' AND niveau = '$niveau'";
         $sql="INSERT INTO matiere  VALUES('$matiere','$niveau',$coefficient)";
+        $result_1=mysqli_query($con,$req);
+        if(mysqli_num_rows($result_1) > 0){
+            echo "erreur";
+        }else{
         $result=mysqli_query($con,$sql);
         $result = $con->query("SELECT * FROM matiere");
 
@@ -20,9 +24,9 @@ if ($con) {
                 <button class="item btn_modifier" id="btn_modifier" data-toggle="modal" data-target="#scrollmodal_modif">
                     <i class="zmdi zmdi-edit"></i>
                 </button>
-                <button class="item btn_supprimer" data-toggle="tooltip" data-placement="top" title="Supprimer" id="btn_supprimer">
-                    <i class="zmdi zmdi-delete"></i>
-                </button>
+               <button class="item btn_supprimer" type="button" data-toggle="modal" data-target="#scrollmodal_supprimer">
+                <i class="zmdi zmdi-delete"></i>
+            </button>
             </div>
         </td>';
             echo '</tr>
@@ -30,6 +34,7 @@ if ($con) {
         }
         $tableau_html = ob_get_clean(); //Obtenir le contenue de la capture
         echo $tableau_html;
+        }
     
 } else {
  die(mysqli_error($con));

@@ -2,8 +2,8 @@
 $niveau = $_POST['niveau'];
 $con=mysqli_connect('localhost','root','','gestion_des_notes');
     if ($con) {
-        $sql="SELECT matiere FROM matiere WHERE niveau = '$niveau';";
-        //$sql = "SELECT * FROM matiere WHERE matiere NOT IN (SELECT matiere FROM ue WHERE niveau = '$niveau') AND niveau = '$niveau'";
+        //$sql="SELECT matiere FROM matiere WHERE niveau = '$niveau';";
+        $sql = "SELECT * FROM matiere WHERE matiere NOT IN (SELECT matiere FROM ue WHERE niveau = '$niveau') AND niveau = '$niveau'";
         $result=mysqli_query($con,$sql);
         $matieres = array();
         if ($result->num_rows > 0) {

@@ -17,14 +17,60 @@ $(document).ready(function(){
     remplirListMatricule();
     //Affichage lors de la chargement de la page
     $.ajax({url : "../../backend/etudiant/affichage_etudiant.php", type : "GET",success : function(result) { $("#affichageEtudiant tbody").html(result);}});
+
+    //Activer le bouton si es formulaire sont rempli
+    $('#ajoutEtudiant input:enabled, #ajoutEtudiant select').on('input change',function () {
+        var formulaireValide = true;
+        $('#ajoutEtudiant input:enabled').each(function() {
+            if($(this).val() === '' ){
+                formulaireValide = false;
+                return false
+            }
+        });
+       
+        if ($('#idNiveau').val() === 'Niveau') {
+            formulaireValide = false;
+        };
+
+        if(formulaireValide){
+            $('#btn_ajouter').prop('disabled', false);
+        }
+        else{
+            $('#btn_ajouter').prop('disabled', true);
+        }
+    });
     
     //Ajout d'une étudiant
     $('#btn_ajouter').click(function(event){
         event.preventDefault();
-        $.ajax({ type : "POST",url : "../../backend/etudiant/ajout_etudiant.php", data : $("#ajoutEtudiant").serialize(),success : function(result) { 
+        $.ajax({ type : "POST",url : "../../backend/etudiant/ajout_etudiant.php", data : $("#ajoutEtudiant").serialize(),success : function(result) {
+            if(result === "erreur"){
+                const messageerror = Swal.mixin({
+                    toast : true,
+                    position : 'top-end',
+                    icon : 'error',
+                    title : "L'édiant existe déjà.",
+                    showConfirmButton : false,
+                    timer : 5000,
+                    timerProgressBar : true
+                });
+                messageerror.fire();
+            }
+           else{
+            const messageSucces = Swal.mixin({
+                toast : true,
+                position : 'top-end',
+                icon : 'success',
+                title : "Ajouter avec succes",
+                showConfirmButton : false,
+                timer : 2500,
+                timerProgressBar : true
+            });
+            messageSucces.fire();
             $("#ajoutEtudiant").trigger('reset');
             $("#affichageEtudiant tbody").html(result);
             remplirListMatricule();
+           }
         }});
 
     });
@@ -46,6 +92,16 @@ $(document).ready(function(){
     $('#btn_valider').click(function(event){
         event.preventDefault();
         $.ajax({ type : "POST",url : "../../backend/etudiant/modifier_etudiant.php", data : $("#modifierEtudiant").serialize(),success : function(result) { 
+            const messageSucces = Swal.mixin({
+                toast : true,
+                position : 'top-end',
+                icon : 'success',
+                title : "Modifier avec succès",
+                showConfirmButton : false,
+                timer : 2500,
+                timerProgressBar : true
+            });
+            messageSucces.fire();
             $("#modifierEtudiant").trigger('reset');
             $("#affichageEtudiant tbody").html(result);
         }});
@@ -55,29 +111,53 @@ $(document).ready(function(){
     //Affichage du modal suppression
     $('#affichageEtudiant').on('click', '.btn_supprimer',function(event){
         event.preventDefault();
-        $(".message").empty();
+       // $(".message").empty();
         var ligne = $(this).closest('tr');
         var valeurTd = [];
         ligne.find('td').each(function() {
             valeurTd.push($(this).text());
         });
-        var message = $('<div>');
-        message.append("La suppression de l'étudiant de matricule : ");
-        message.append('<span class="matricule_supprimer" style="font-weight :bold">'+valeurTd[0]+'</span>');
-        message.append(', supprimera toutes ces données et ces notes. <br> Voulez-vous continuer ?');
-        // var message = "La suppression de l'étudiant de matricule : " + valeurTd[0] +", de niveau : "+valeurTd[3]+ ", supprimera toutes ces données et ces notes. Voulez-vous continuer ?";
-        $(".message").append(message);
+        const messageErreur = Swal.mixin({
+            title : 'Voulez-vous vraiment supprimer l\'étudiant <span class="matricule_supprimer" style="font-weight :bold">'+valeurTd[0]+'</span>?',
+            text : 'Cette action supprimera toutes ces données et ces notes.',
+           icon : 'warning',
+           showCancelButton : true,
+           confirmButtonColor : '#d33',
+           //cancelButtonColor : '#d33',
+           confirmButtonText : 'Oui, supprimer',
+           cancelButtonText  : 'Annuler',
+        });
+        messageErreur.fire().then((result) => {
+            if(result.isConfirmed){
+                supprimerEtudiant();
+                Swal.fire({
+                position : 'top-end',
+                toast :true,
+                title :'Supprimer avec succès.',
+                icon : 'success',
+                showConfirmButton : false,
+                timer : 2500,
+                timerProgressBar : true              
+                })
+            }
+        });
          
     });
 
     //Supprimer etudiant
-    $('#btn_confirmer_suppression').click(function (event) {
-        event.preventDefault();
+    function supprimerEtudiant(event) {
         var matricule = $(".matricule_supprimer").text();
         $.ajax({ type : "POST",url : "../../backend/etudiant/supprimer_etudiant.php", data : {matricule : matricule} , success : function(result) { 
             $("#affichageEtudiant tbody").html(result);
-        }});          
-    })
+        }}); 
+    }
+    // $('#btn_confirmer_suppression').click(function (event) {
+    //     event.preventDefault();
+    //     var matricule = $(".matricule_supprimer").text();
+    //     $.ajax({ type : "POST",url : "../../backend/etudiant/supprimer_etudiant.php", data : {matricule : matricule} , success : function(result) { 
+    //         $("#affichageEtudiant tbody").html(result);
+    //     }});          
+    // })
 
     //Recherche par Niveau avec le menu select
     $('#niveau_datatable').change(function(event){
@@ -138,4 +218,41 @@ $(document).ready(function(){
         }
 
         animationText("Liste des étudiants.");
+
+     $('#sweet-boutton').click(function(event){
+        event.preventDefault();
+        const messageSucces = Swal.mixin({
+        toast : true,
+            position : 'top-end',
+           icon : 'error',
+           title : "Ajout avec succes",
+           showConfirmButton : false,
+           timer : 1500,
+           timerProgressBar : true
+        });
+        messageSucces.fire();
+        const messageErreur = Swal.mixin({
+            title : 'Voulez-vous vraiment supprimer l\'étudiant ?',
+            text : 'Cette action supprimera toutes ces données et ces notes.',
+           icon : 'warning',
+           showCancelButton : true,
+           confirmButtonColor : '#d33',
+           //cancelButtonColor : '#d33',
+           confirmButtonText : 'Oui, supprimer',
+           cancelButtonText  : 'Annuler',
+        });
+        messageErreur.fire().then((result) => {
+            if(result.isConfirmed){
+                Swal.fire({
+                position : 'top-end',
+                toast :true,
+                title :'Supprimer avec succès.',
+                icon : 'success',
+                showConfirmButton : false,
+                timer : 1500,
+                timerProgressBar : true              
+                })
+            }
+        });
+     });
 });

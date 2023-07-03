@@ -73,7 +73,7 @@
                                     <a href="matiere.php">Matière</a>
                                 </li>
                                 <li>
-                                    <a href="ue">U.E</a>
+                                    <a href="ue.php">U.E</a>
                                 </li>
                             </ul>
                         </li>
@@ -128,7 +128,7 @@
                                     <a href="matiere.php">Matière</a>
                                 </li>
                                 <li>
-                                    <a href="#">U.E</a>
+                                    <a href="ue.php">U.E</a>
                                 </li>
                             </ul>
                         </li>

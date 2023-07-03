@@ -5,7 +5,7 @@ if ($con) {
     $nomUE=$_POST['ue'];
     $niveau=$_POST['niveau'];
     $matiere = $_POST['matiere'];
-    $sql1 = "SELECT * FROM ue WHERE nomUE = '$nomUE'";
+    $sql1 = "SELECT * FROM ue WHERE nomUE = '$nomUE' AND niveau = '$niveau'";
     $result_1=mysqli_query($con,$sql1);
     if (mysqli_num_rows($result_1) > 0) {
        echo "erreur";
